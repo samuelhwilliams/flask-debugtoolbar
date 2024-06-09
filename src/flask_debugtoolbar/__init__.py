@@ -21,6 +21,7 @@ from jinja2 import PackageLoader
 from werkzeug import Request
 from werkzeug import Response
 from werkzeug.routing import Rule
+from urllib.parse import unquote
 
 from .toolbar import DebugToolbar
 from .utils import decode_text
@@ -130,6 +131,7 @@ class DebugToolbarExtension:
                 "flask_debugtoolbar.panels.logger.LoggingPanel",
                 "flask_debugtoolbar.panels.route_list.RouteListDebugPanel",
                 "flask_debugtoolbar.panels.profiler.ProfilerDebugPanel",
+                "flask_debugtoolbar.panels.intercept_redirects.InterceptRedirectsDebugPanel",
                 "flask_debugtoolbar.panels.g.GDebugPanel",
             ),
             "SQLALCHEMY_RECORD_QUERIES": app.debug,
@@ -223,7 +225,11 @@ class DebugToolbarExtension:
 
         # Intercept http redirect codes and display an html page with a
         # link to the target.
-        if current_app.config["DEBUG_TB_INTERCEPT_REDIRECTS"]:
+        activated_str = real_request.cookies.get("fldt_active", "")
+        activated = unquote(activated_str).split(";")
+        intercept_activated = "flDebugInterceptRedirectsPanel" in activated
+
+        if intercept_activated:
             if response.status_code in self._redirect_codes:
                 redirect_to = response.location
                 redirect_code = response.status_code

@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = True
 # app.config['DEBUG_TB_PANELS'] = (
 #    'flask_debugtoolbar.panels.headers.HeaderDebugPanel',
