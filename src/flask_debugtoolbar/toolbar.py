@@ -17,7 +17,7 @@ class DebugToolbar(object):
         self.panels = []
 
         self.template_context = {
-            'static_path': url_for('_debug_toolbar.static', filename='')
+            'static_path': url_for('_debug_toolbar.static', filename='', _external=False)
         }
 
         self.create_panels()

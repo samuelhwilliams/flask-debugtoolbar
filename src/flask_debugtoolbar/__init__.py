@@ -2,6 +2,7 @@ import contextvars
 import os
 import urllib.parse
 import warnings
+from functools import partial
 
 import flask
 from flask import Blueprint, current_app, request, g, send_from_directory, url_for, Flask
@@ -75,7 +76,7 @@ class DebugToolbarExtension(object):
             loader=PackageLoader(__name__, 'templates'))
         self.jinja_env.filters['urlencode'] = urllib.parse.quote_plus
         self.jinja_env.filters['printable'] = _printable
-        self.jinja_env.globals['url_for'] = url_for
+        self.jinja_env.globals['url_for'] = partial(url_for, _external=False)
 
         if app is not None:
             self.init_app(app, host=host)

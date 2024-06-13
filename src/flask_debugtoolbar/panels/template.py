@@ -96,7 +96,7 @@ def template_editor(key):
     templates = [t['template'] for t in
                  TemplateDebugPanel.get_cache_for_key(key)]
     return g.debug_toolbar.render('panels/template_editor.html', {
-        'static_path': url_for('_debug_toolbar.static', filename=''),
+        'static_path': url_for('_debug_toolbar.static', filename='', _external=False),
         'request': request,
         'templates': [
             {'name': t.name, 'source': _get_source(t)}
