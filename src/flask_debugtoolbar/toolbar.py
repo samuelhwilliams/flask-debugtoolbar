@@ -16,6 +16,8 @@ class DebugToolbar(object):
         self.request = request
         self.panels = []
 
+        breakpoint()
+
         self.template_context = {
             'static_path': url_for('_debug_toolbar.static', filename='', _external=False)
         }
