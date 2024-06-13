@@ -4,7 +4,7 @@ import urllib.parse
 import warnings
 
 import flask
-from flask import Blueprint, current_app, request, g, send_from_directory, url_for
+from flask import Blueprint, current_app, request, g, send_from_directory, url_for, Flask
 from flask.globals import request_ctx
 
 from jinja2 import __version__ as __jinja_version__
@@ -56,8 +56,9 @@ class DebugToolbarExtension(object):
     _toolbar_codes = [200, 201, 400, 401, 403, 404, 405, 500, 501, 502, 503, 504]
     _redirect_codes = [301, 302, 303, 304]
 
-    def __init__(self, app=None):
+    def __init__(self, app: Flask | None = None, host: str | None = None) -> None:
         self.app = app
+        self.host = host
         # Support threads running  `flask.copy_current_request_context` without
         # poping toolbar during `teardown_request`
         self.debug_toolbars_var = contextvars.ContextVar('debug_toolbars')
@@ -77,9 +78,11 @@ class DebugToolbarExtension(object):
         self.jinja_env.globals['url_for'] = url_for
 
         if app is not None:
-            self.init_app(app)
+            self.init_app(app, host=host)
 
-    def init_app(self, app):
+    def init_app(self, app: Flask, host: str | None = None) -> None:
+        self.host = host
+
         for k, v in iteritems(self._default_config(app)):
             app.config.setdefault(k, v)
 
@@ -100,8 +103,12 @@ class DebugToolbarExtension(object):
         # Monkey-patch the Flask.dispatch_request method
         app.dispatch_request = self.dispatch_request
 
-        app.add_url_rule('/_debug_toolbar/static/<path:filename>',
-                         '_debug_toolbar.static', self.send_static_file)
+        app.add_url_rule(
+            "/_debug_toolbar/static/<path:filename>",
+            "_debug_toolbar.static",
+            self.send_static_file,
+            host=host,
+        )
 
         app.register_blueprint(module, url_prefix='/_debug_toolbar/views')
 
@@ -159,8 +166,12 @@ class DebugToolbarExtension(object):
 
         return True
 
-    def send_static_file(self, filename):
-        """Send a static file from the flask-debugtoolbar static directory."""
+    def send_static_file(self, filename: str, **kwargs):
+        """Send a static file from the flask-debugtoolbar static directory.
+
+        `kwargs` will contain any Werkzeug Rule variables from the request host,
+        if Flask-DebugToolbar is configured with a `host` that contains variables.
+        This is not used in the base class but may be used by any subclass."""
         return send_from_directory(self._static_dir, filename)
 
     def process_request(self):
