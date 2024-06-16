@@ -156,6 +156,11 @@ pytest==8.2.1
     # via
     #   -r tests.txt
     #   -r typing.txt
+    #   pytest-mock
+pytest-mock==3.14.0
+    # via
+    #   -r tests.txt
+    #   -r typing.txt
 pytz==2024.1
     # via
     #   -r docs.txt

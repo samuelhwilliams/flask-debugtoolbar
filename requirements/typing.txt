@@ -41,6 +41,10 @@ pluggy==1.5.0
 pyright==1.1.365
     # via -r typing.in
 pytest==8.2.1
+    # via
+    #   -r typing.in
+    #   pytest-mock
+pytest-mock==3.14.0
     # via -r typing.in
 sqlalchemy==2.0.29
     # via flask-sqlalchemy
