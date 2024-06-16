@@ -1,5 +1,7 @@
 mypy
 pyright
 pytest
+pytest-mock
 types-pygments
 flask-sqlalchemy
+types-beautifulsoup4

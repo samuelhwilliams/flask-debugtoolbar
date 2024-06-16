@@ -14,8 +14,6 @@ flask==3.0.3
     # via flask-sqlalchemy
 flask-sqlalchemy==3.1.1
     # via -r typing.in
-greenlet==3.0.3
-    # via sqlalchemy
 importlib-metadata==7.1.0
     # via flask
 iniconfig==2.0.0
@@ -41,6 +39,10 @@ pluggy==1.5.0
 pyright==1.1.365
     # via -r typing.in
 pytest==8.2.1
+    # via
+    #   -r typing.in
+    #   pytest-mock
+pytest-mock==3.14.0
     # via -r typing.in
 sqlalchemy==2.0.29
     # via flask-sqlalchemy
@@ -48,8 +50,12 @@ tomli==2.0.1
     # via
     #   mypy
     #   pytest
+types-beautifulsoup4==4.12.0.20240511
+    # via -r typing.in
 types-docutils==0.21.0.20240423
     # via types-pygments
+types-html5lib==1.1.11.20240228
+    # via types-beautifulsoup4
 types-pygments==2.18.0.20240506
     # via -r typing.in
 types-setuptools==69.5.0.20240423
